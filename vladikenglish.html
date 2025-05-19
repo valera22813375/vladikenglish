@@ -1,0 +1,285 @@
+html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Изучай английский через игры</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #2d2d2d;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-card {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 2rem 0;
+        }
+
+        .benefits-list {
+            list-style: none;
+            padding: 2rem;
+            background-color: #262626;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .benefits-list li {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #333;
+            border-left: 4px solid #4CAF50;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+
+        .modal-content {
+            background-color: #333;
+            margin: 15% auto;
+            padding: 20px;
+            width: 70%;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .resource-link {
+            color: #4CAF50;
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .game-card {
+                padding: 15px;
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: 30% auto;
+                padding: 15px;
+            }
+
+            .game-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .modal-content {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>English Through Games</h1>
+            <p>Учи английский, играя в видеоигры!</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="intro">
+            <h2>Почему видеоигры?</h2>
+            <ul class="benefits-list">
+                <li>Погружение в языковую среду</li>
+                <li>Изучение современной лексики</li>
+                <li>Интерактивное обучение</li>
+                <li>Практика аудирования</li>
+            </ul>
+        </section>
+
+        <section class="game-recommendations">
+            <h2>Рекомендуемые игры</h2>
+            <div class="game-grid" id="gamesContainer"></div>
+        </section>
+
+        <section class="resources">
+            <h2>Полезные ресурсы</h2>
+            <div class="game-grid">
+                <div class="game-card">
+                    <h3>Онлайн-словарь</h3>
+                    <a href="https://dictionary.cambridge.org/" 
+                       class="resource-link" 
+                       target="_blank">Cambridge Dictionary</a>
+                </div>
+                <div class="game-card">
+                    <h3>Игровое сообщество</h3>
+                    <a href="https://discord.gg/english" 
+                       class="resource-link" 
+                       target="_blank">English Learning Discord</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="tipsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalText"></div>
+        </div>
+    </div>
+
+    <script>
+        const games = [
+            {
+                title: "Minecraft",
+                description: "Создавай миры и учи английский одновременно",
+                tips: [
+                    "Читайте описания предметов и рецептов",
+                    "Общайтесь с игроками на серверах",
+                    "Используйте английские модификации"
+                ],
+                storeUrl: "https://www.minecraft.net/"
+            },
+            {
+                title: "Gothic 1",
+                description: "Культовая RPG с богатым повествованием",
+                tips: [
+                    "Анализируйте диалоги персонажей",
+                    "Читайте внутриигровые книги",
+                    "Повторяйте реплики вслух"
+                ],
+                storeUrl: "https://store.steampowered.com/app/65540/Gothic_1/"
+            },
+            {
+                title: "Among Us",
+                description: "Развивай разговорные навыки",
+                tips: [
+                    "Участвуйте в обсуждениях",
+                    "Используйте голосовой чат",
+                    "Играйте на англоязычных серверах"
+                ],
+                storeUrl: "https://store.steampowered.com/app/945360/Among_Us/"
+            }
+        ];
+
+        function initGames() {
+            const container = document.getElementById('gamesContainer');
+            
+            games.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerHTML = `
+                    <h3>${game.title}</h3>
+                    <p>${game.description}</p>
+                    <button onclick="showTips('${game.title}')">Советы по обучению</button>
+                    <a href="${game.storeUrl}" 
+                       class="resource-link" 
+                       target="_blank">Официальный сайт →</a>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function showTips(title) {
+            const game = games.find(g => g.title === title);
+            const modal = document.getElementById('tipsModal');
+            const modalText = document.getElementById('modalText');
+            
+            let content = `<h3>${title}</h3><ul>`;
+            game.tips.forEach(tip => content += `<li>${tip}</li>`);
+            content += '</ul>';
+            
+            modalText.innerHTML = content;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('tipsModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('tipsModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        initGames();
+    </script>
+</body>
+</html>
